@@ -1,3 +1,7 @@
+from glicko import Glicko
 
-class Team:
-    ...
+
+class Team(Glicko):
+
+    def __init__(self):
+        super().__init__()
