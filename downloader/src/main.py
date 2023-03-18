@@ -1,5 +1,8 @@
 import json
+
+from tqdm import tqdm
 from octanegg import Octane
+
 from player import Player
 from team import Team
 from region import Region
@@ -36,15 +39,25 @@ def download_all_data():
             print(start, " -- ", end)
             temp_matches = []
             temp_matches += get_matches(client, "A", start, end)
-            print("-----")
             temp_matches += get_matches(client, "S", start, end)
             temp_matches.reverse()
-        matches += temp_matches
+            matches += temp_matches
 
     # Export matches to JSON
-    with open('data/matches_regionals.json', 'w') as f:
+    with open('data/matches.json', 'w') as f:
         json.dump(matches, f, indent=4)
 
 
+def compute_elo():
+    # Import matches from JSON
+    with open('data/matches.json', 'r') as f:
+        matches = json.load(f)
+
+    # Create players, teams, and regions
+    for match in tqdm(matches):
+        ...
+
+
 if __name__ == '__main__':
-    download_all_data()
+    # download_all_data()
+    compute_elo()
