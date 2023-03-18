@@ -13,7 +13,7 @@ def get_matches(client, tier: str, after: str, before: str) -> list:
     matches = []
 
     while True:
-        current_page_matches = client.get_matches(tier=tier, after=after, before=before, page=page)
+        current_page_matches = client.get_matches(tier=tier, mode='3', after=after, before=before, page=page)
         if not current_page_matches:
             break
         matches += current_page_matches
@@ -38,12 +38,22 @@ def download_all_data():
             print("-----------------------------------------------------")
             print(start, " -- ", end)
             temp_matches = []
-            temp_matches += get_matches(client, "A", start, end)
             temp_matches += get_matches(client, "S", start, end)
+            temp_matches += get_matches(client, "A", start, end)
             temp_matches.reverse()
             matches += temp_matches
 
     # Export matches to JSON
+    with open('data/matches.json', 'w') as f:
+        json.dump(matches, f, indent=4)
+
+
+def sort_matches():
+    with open('data/matches.json', 'r') as f:
+        matches = json.load(f)
+
+    matches.sort(key=lambda x: x["date"])
+
     with open('data/matches.json', 'w') as f:
         json.dump(matches, f, indent=4)
 
@@ -54,10 +64,12 @@ def compute_elo():
         matches = json.load(f)
 
     # Create players, teams, and regions
+    regions = []
     for match in tqdm(matches):
         ...
 
 
 if __name__ == '__main__':
     # download_all_data()
+    # sort_matches()
     compute_elo()
