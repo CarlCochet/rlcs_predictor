@@ -66,7 +66,10 @@ def compute_elo():
     # Create players, teams, and regions
     regions = []
     for match in tqdm(matches):
-        ...
+        region = match["event"]["region"]
+        blue_team = match["blue"]["team"]["team"]["name"]
+        orange_team = match["orange"]["team"]["team"]["name"]
+        result = match["blue"].get("winner", False)
 
 
 if __name__ == '__main__':
