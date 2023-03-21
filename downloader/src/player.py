@@ -3,8 +3,9 @@ import math
 
 class Player:
 
-    def __init__(self):
+    def __init__(self, name: str):
         self.rating = 1500
+        self.name = name
 
     def update_rating(self, change: int, score: int, team_scores: [int]):
         gamma = 6
