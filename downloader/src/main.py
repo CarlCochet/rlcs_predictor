@@ -58,6 +58,16 @@ def sort_matches():
         json.dump(matches, f, indent=4)
 
 
+def get_region(match: dict, regions: list) -> int:
+    name = match["event"]["region"]
+    for i, region in enumerate(regions):
+        if region.name == name:
+            return i
+    region_obj = Region(name)
+    regions.append(region_obj)
+    return len(regions) - 1
+
+
 def compute_elo():
     # Import matches from JSON
     with open('data/matches.json', 'r') as f:
@@ -66,15 +76,7 @@ def compute_elo():
     # Create players, teams, and regions
     regions = []
     for match in tqdm(matches):
-        region_name = match["event"]["region"]
-        new_region = True
-        for region in regions:
-            if region.name == region_name:
-                new_region = False
-                break
-        if new_region:
-            region_obj = Region(region_name)
-            regions.append(region_obj)
+        region_id = get_region(match, regions)
 
         blue_team = match["blue"]["team"]["team"]["name"]
         orange_team = match["orange"]["team"]["team"]["name"]
