@@ -1,7 +1,11 @@
-mod download;
+mod player;
+mod region;
+mod team;
 
-use download::download_series_data;
+use crate::player::Player;
+use crate::team::Team;
+use crate::region::Region;
 
 fn main() {
-    download_series_data();
+    println!("Hello, world!")
 }
