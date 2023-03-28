@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 glicko_2 = "1.0.0"
+serde_json = "1.0.95"
