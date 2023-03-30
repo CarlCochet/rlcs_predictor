@@ -13,4 +13,10 @@ impl Team {
             rating: 1500,
         }
     }
+
+    pub fn find_player(&mut self, name: String) -> Option<&mut Player> {
+        self.players
+            .iter_mut()
+            .find(|p| p.name == name)
+    }
 }

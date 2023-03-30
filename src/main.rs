@@ -30,15 +30,36 @@ fn find_region(regions: &mut Vec<Region>, name: String) -> Option<&mut Region> {
         })
 }
 
+fn find_players(regions: &mut Vec<Region>, players: &Vec<String>) -> Vec<Player> {
+    let mut result: Vec<Player> = Vec::new();
+    for player in players {
+        let mut found = false;
+        for region in regions {
+            if let Some(p) = region.find_player(player.clone()) {
+                result.push(p.clone());
+                found = true;
+                break;
+            }
+        }
+        if !found {
+            result.push(Player::new(player.clone()));
+        }
+    }
+    result
+}
+
 fn simulate_matches(matches: &Vec<Match>) {
     let mut regions: Vec<Region> = Vec::new();
 
     for series in matches {
         let region = find_region(&mut regions, series.event.region.clone())?;
+        let blue_players: Vec<Player> = series.blue.as_ref().unwrap()
+            .players.as_ref().unwrap()
+            .iter()
+            .map(|p| Player::new(p.name.clone()))
+            .collect();
         let blue_team = region.find_team(series.blue.as_ref().unwrap().team.team.name.clone())?;
         let orange_team = region.find_team(series.orange.as_ref().unwrap().team.team.name.clone())?;
-
-
     }
 }
 
