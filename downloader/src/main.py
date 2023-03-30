@@ -70,7 +70,7 @@ def get_region(match: dict, regions: list) -> int:
 
 def compute_elo():
     # Import matches from JSON
-    with open('data/matches.json', 'r') as f:
+    with open('data/matches_test.json', 'r') as f:
         matches = json.load(f)
 
     # Create players, teams, and regions

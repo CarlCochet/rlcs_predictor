@@ -4,10 +4,10 @@ pub struct Player {
     pub rating: i32,
 }
 impl Player {
-    pub fn new(name: String, rating: i32) -> Player {
+    pub fn new(name: String) -> Player {
         Player {
             name,
-            rating,
+            rating: 1500,
         }
     }
 
@@ -17,18 +17,18 @@ impl Player {
         let score_ratio = score as f32 / team_score as f32;
 
         if change > 0 {
-            let sa = 3.0 * (score_ratio.powi(gamma) as f32 /
-                ((team_scores[0] / team_score).powi(gamma) as f32 +
-                (team_scores[1] / team_score).powi(gamma) as f32 +
-                (team_scores[2] / team_score).powi(gamma) as f32));
+            let sa = 3.0 * (score_ratio.powf(gamma as f32) as f32 /
+                ((team_scores[0] as f32 / team_score as f32).powf(gamma as f32) as f32 +
+                (team_scores[1] as f32 / team_score as f32).powf(gamma as f32) as f32 +
+                (team_scores[2] as f32 / team_score as f32).powf(gamma as f32) as f32));
             self.rating += (change as f32 * sa) as i32;
         }
         else {
-            let sa = 3.0 * ((1.0 / score_ratio).powi(gamma) as f32 /
-                ((1.0 / (team_scores[0] / team_score)).powi(gamma) as f32 +
-                (1.0 / (team_scores[1] / team_score)).powi(gamma) as f32 +
-                (1.0 / (team_scores[2] / team_score)).powi(gamma) as f32));
-            self.rating -= (change.abs() as f32 * sa) as i32;
+            let sa = 3.0 * ((1.0 / score_ratio).powf(gamma as f32) as f32 /
+                ((1.0 / (team_scores[0] as f32 / team_score as f32)).powf(gamma as f32) as f32 +
+                (1.0 / (team_scores[1] as f32 / team_score as f32)).powf(gamma as f32) as f32 +
+                (1.0 / (team_scores[2] as f32 / team_score as f32)).powf(gamma as f32) as f32));
+            self.rating += (change.abs() as f32 * sa) as i32;
         }
     }
 }
