@@ -30,8 +30,8 @@ fn find_region(regions: &mut Vec<Region>, name: String) -> Option<&mut Region> {
         })
 }
 
-fn find_players(regions: &mut Vec<Region>, team: &rlcs_data::Team) -> Vec<Player> {
-    let players_names = team.players.as_ref().unwrap()
+fn find_players(regions: &mut Vec<Region>, team: &rlcs_data::Team) -> Option<Vec<Player>> {
+    let players_names = team.players.as_ref()?
         .iter()
         .map(|p| p.name.clone())
         .collect::<Vec<String>>();
@@ -49,7 +49,7 @@ fn find_players(regions: &mut Vec<Region>, team: &rlcs_data::Team) -> Vec<Player
             result.push(Player::new(player.clone()));
         }
     }
-    result
+    Some(result)
 }
 
 fn simulate_matches(matches: &Vec<Match>) {
@@ -57,10 +57,27 @@ fn simulate_matches(matches: &Vec<Match>) {
 
     for series in matches {
         let region = find_region(&mut regions, series.event.region.clone())?;
-        let mut blue_players: Vec<Player> = find_players(&mut regions, &series.blue.as_ref().unwrap());
-        let mut orange_players: Vec<Player> = find_players(&mut regions, &series.orange.as_ref().unwrap());
-        let blue_team = region.find_team(series.blue.as_ref().unwrap().team.team.name.clone())?;
-        let orange_team = region.find_team(series.orange.as_ref().unwrap().team.team.name.clone())?;
+
+        let blue_ref: &rlcs_data::Team = match series.blue.as_ref() {
+            Ok(b) => b,
+            Err(_) => continue,
+        };
+        let orange_ref: &rlcs_data::Team = match series.orange.as_ref() {
+            Ok(o) => o,
+            Err(_) => continue,
+        };
+
+        let mut blue_players: Vec<Player> = match find_players(&mut regions, blue_ref) {
+            Some(p) => p,
+            None => continue,
+        };
+        let mut orange_players: Vec<Player> = match find_players(&mut regions, orange_ref) {
+            Some(p) => p,
+            None => continue,
+        };
+
+        let blue_team = region.find_team(blue_ref.team.team.name.clone())?;
+        let orange_team = region.find_team(orange_ref.team.team.name.clone())?;
     }
 }
 
