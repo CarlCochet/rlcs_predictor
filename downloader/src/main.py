@@ -58,39 +58,6 @@ def sort_matches():
         json.dump(matches, f, indent=4)
 
 
-def get_region(match: dict, regions: list) -> int:
-    name = match["event"]["region"]
-    for i, region in enumerate(regions):
-        if region.name == name:
-            return i
-    region_obj = Region(name)
-    regions.append(region_obj)
-    return len(regions) - 1
-
-
-def compute_elo():
-    # Import matches from JSON
-    with open('data/matches_test.json', 'r') as f:
-        matches = json.load(f)
-
-    # Create players, teams, and regions
-    regions = []
-    for match in tqdm(matches):
-        region_id = get_region(match, regions)
-
-        blue_team = match["blue"]["team"]["team"]["name"]
-        orange_team = match["orange"]["team"]["team"]["name"]
-        result = match["blue"].get("winner", False)
-        for player in match["blue"]["players"]:
-            name = player["player"]["tag"]
-            player_obj = Player(name)
-
-        for player in match["orange"]["players"]:
-            name = player["player"]["tag"]
-            player_obj = Player(name)
-
-
 if __name__ == '__main__':
-    # download_all_data()
-    # sort_matches()
-    compute_elo()
+    download_all_data()
+    sort_matches()

@@ -30,9 +30,13 @@ fn find_region(regions: &mut Vec<Region>, name: String) -> Option<&mut Region> {
         })
 }
 
-fn find_players(regions: &mut Vec<Region>, players: &Vec<String>) -> Vec<Player> {
+fn find_players(regions: &mut Vec<Region>, team: &rlcs_data::Team) -> Vec<Player> {
+    let players_names = team.players.as_ref().unwrap()
+        .iter()
+        .map(|p| p.name.clone())
+        .collect::<Vec<String>>();
     let mut result: Vec<Player> = Vec::new();
-    for player in players {
+    for player in players_names {
         let mut found = false;
         for region in regions {
             if let Some(p) = region.find_player(player.clone()) {
@@ -53,11 +57,8 @@ fn simulate_matches(matches: &Vec<Match>) {
 
     for series in matches {
         let region = find_region(&mut regions, series.event.region.clone())?;
-        let blue_players: Vec<Player> = series.blue.as_ref().unwrap()
-            .players.as_ref().unwrap()
-            .iter()
-            .map(|p| Player::new(p.name.clone()))
-            .collect();
+        let mut blue_players: Vec<Player> = find_players(&mut regions, &series.blue.as_ref().unwrap());
+        let mut orange_players: Vec<Player> = find_players(&mut regions, &series.orange.as_ref().unwrap());
         let blue_team = region.find_team(series.blue.as_ref().unwrap().team.team.name.clone())?;
         let orange_team = region.find_team(series.orange.as_ref().unwrap().team.team.name.clone())?;
     }
