@@ -59,12 +59,12 @@ fn simulate_matches(matches: &Vec<Match>) {
         let region = find_region(&mut regions, series.event.region.clone())?;
 
         let blue_ref: &rlcs_data::Team = match series.blue.as_ref() {
-            Ok(b) => b,
-            Err(_) => continue,
+            Some(b) => b,
+            None => continue,
         };
         let orange_ref: &rlcs_data::Team = match series.orange.as_ref() {
-            Ok(o) => o,
-            Err(_) => continue,
+            Some(o) => o,
+            None => continue,
         };
 
         let mut blue_players: Vec<Player> = match find_players(&mut regions, blue_ref) {
