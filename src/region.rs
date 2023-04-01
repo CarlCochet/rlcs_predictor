@@ -17,13 +17,12 @@ impl Region {
     }
 
     pub fn find_team(&mut self, name: String) -> Option<&mut Team> {
-        self.teams
-            .iter_mut()
-            .find(|t| t.name == name)
-            .or_else(|| {
-                self.teams.push(Team::new(name.clone()));
-                self.teams.last_mut()
-            })
+        if let Some(index) = self.teams.iter().position(|t| t.name == name) {
+            Some(&mut self.teams[index])
+        } else {
+            self.teams.push(Team::new(name));
+            self.teams.last_mut()
+        }
     }
 
     pub fn find_player(&mut self, name: String) -> Option<&mut Player> {

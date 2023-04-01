@@ -21,13 +21,12 @@ fn parse_data() -> Result<(Vec<Match>)> {
 }
 
 fn find_region(regions: &mut Vec<Region>, name: String) -> Option<&mut Region> {
-    regions
-        .iter_mut()
-        .find(|r| r.name == name)
-        .or_else(|| {
-            regions.push(Region::new(name.clone()));
-            regions.last_mut()
-        })
+    if let Some(index) = regions.iter().position(|r| r.name == name) {
+        Some(&mut regions[index])
+    } else {
+        regions.push(Region::new(name.clone()));
+        regions.last_mut()
+    }
 }
 
 fn find_players(regions: &mut Vec<Region>, team: &rlcs_data::Team) -> Option<Vec<Player>> {
@@ -52,7 +51,7 @@ fn find_players(regions: &mut Vec<Region>, team: &rlcs_data::Team) -> Option<Vec
     Some(result)
 }
 
-fn simulate_matches(matches: &Vec<Match>) {
+fn simulate_matches(matches: &Vec<Match>) -> Option<()> {
     let mut regions: Vec<Region> = Vec::new();
 
     for series in matches {
@@ -79,6 +78,7 @@ fn simulate_matches(matches: &Vec<Match>) {
         let blue_team = region.find_team(blue_ref.team.team.name.clone())?;
         let orange_team = region.find_team(orange_ref.team.team.name.clone())?;
     }
+    Some(())
 }
 
 fn main() {
@@ -86,6 +86,6 @@ fn main() {
         Ok(matches) => matches,
         Err(e) => panic!("Error: {}", e),
     };
-    simulate_matches(&matches);
+    simulate_matches(&matches).expect("Error simulating matches.");
     println!("The first event is {}.", matches[0].blue.as_ref().unwrap().team.team.name);
 }
