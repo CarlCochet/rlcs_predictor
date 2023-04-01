@@ -13,10 +13,10 @@ use crate::region::Region;
 use crate::rlcs_data::Match;
 
 fn parse_data() -> Result<(Vec<Match>)> {
-    let mut file = File::open("data/matches_full.json")?;
+    let mut file = File::open("data/matches_full.json").expect("File not found.");
     let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
-    let matches: Vec<Match> = serde_json::from_str(&contents)?;
+    file.read_to_string(&mut contents).expect("Error reading file.");
+    let matches: Vec<Match> = serde_json::from_str(&contents).expect("Error parsing JSON.");
     Ok(matches)
 }
 
