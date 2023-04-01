@@ -25,8 +25,8 @@ impl Region {
         }
     }
 
-    pub fn find_player(&mut self, name: String) -> Option<&mut Player> {
-        for team in self.teams.iter_mut() {
+    pub fn find_player(&self, name: String) -> Option<&Player> {
+        for team in self.teams.iter() {
             if let Some(p) = team.find_player(name.clone()) {
                 return Some(p);
             }
