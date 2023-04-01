@@ -1,6 +1,7 @@
 use crate::team::Team;
 use crate::player::Player;
 
+#[derive(Debug, Clone)]
 pub struct Region {
     pub name: String,
     pub teams: Vec<Team>,

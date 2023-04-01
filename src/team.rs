@@ -1,5 +1,6 @@
 use crate::player::Player;
 
+#[derive(Debug, Clone)]
 pub struct Team {
     pub name: String,
     pub players: Vec<Player>,

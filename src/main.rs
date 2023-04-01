@@ -33,7 +33,7 @@ fn find_region(regions: &mut Vec<Region>, name: String) -> Option<&mut Region> {
 fn find_players(regions: &mut Vec<Region>, team: &rlcs_data::Team) -> Option<Vec<Player>> {
     let players_names = team.players.as_ref()?
         .iter()
-        .map(|p| p.name.clone())
+        .map(|p| p.player.slug.clone())
         .collect::<Vec<String>>();
     let mut result: Vec<Player> = Vec::new();
     for player in players_names {
