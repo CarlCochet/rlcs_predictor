@@ -16,11 +16,19 @@ impl Region {
         }
     }
 
-    pub fn find_team(&mut self, name: String) -> Option<&mut Team> {
+    pub fn get_team(&mut self, name: String, players: &Vec<Player>) -> Option<&mut Team> {
         if let Some(index) = self.teams.iter().position(|t| t.name == name) {
             Some(&mut self.teams[index])
+        } else if let Some(index) = self.teams.iter()
+            .position(|t| t.players.len() == players.len() && t.players.iter()
+                .zip(players.iter()).all(|(a, b)| a.name == b.name)) {
+            Some(&mut self.teams[index])
         } else {
-            self.teams.push(Team::new(name));
+            let mut team = Team::new(name.clone());
+            for player in players.iter() {
+                team.players.push(player.clone());
+            }
+            self.teams.push(team);
             self.teams.last_mut()
         }
     }
