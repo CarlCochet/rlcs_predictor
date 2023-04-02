@@ -16,7 +16,7 @@ impl Region {
         }
     }
 
-    pub fn get_team(&mut self, name: String, players: &Vec<Player>) -> Option<&mut Team> {
+    pub fn get_team(&self, name: String, players: &Vec<Player>) -> Option<&mut Team> {
         if let Some(index) = self.teams.iter().position(|t| t.name == name) {
             Some(&mut self.teams[index])
         } else if let Some(index) = self.teams.iter()
