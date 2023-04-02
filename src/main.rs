@@ -12,7 +12,7 @@ use crate::team::Team;
 use crate::region::Region;
 use crate::rlcs_data::Match;
 
-fn parse_data() -> Result<(Vec<Match>)> {
+fn parse_data() -> Result<Vec<Match>> {
     let mut file = File::open("data/matches_full.json").expect("File not found.");
     let mut contents = String::new();
     file.read_to_string(&mut contents).expect("Error reading file.");
@@ -55,8 +55,6 @@ fn simulate_matches(matches: &Vec<Match>) -> Option<()> {
     let mut regions: Vec<Region> = Vec::new();
 
     for series in matches {
-        let mut region = find_region(&mut regions, series.event.region.clone())?;
-
         let blue_ref: &rlcs_data::Team = match series.blue.as_ref() {
             Some(b) => b,
             None => continue,
@@ -66,15 +64,16 @@ fn simulate_matches(matches: &Vec<Match>) -> Option<()> {
             None => continue,
         };
 
-        let mut blue_players: Vec<Player> = match find_players(&regions, blue_ref) {
+        let blue_players: Vec<Player> = match find_players(&regions, blue_ref) {
             Some(p) => p,
             None => continue,
         };
-        let mut orange_players: Vec<Player> = match find_players(&regions, orange_ref) {
+        let orange_players: Vec<Player> = match find_players(&regions, orange_ref) {
             Some(p) => p,
             None => continue,
         };
 
+        let region = find_region(&mut regions, series.event.region.clone())?;
         let blue_team = region.find_team(blue_ref.team.team.name.clone())?;
         let orange_team = region.find_team(orange_ref.team.team.name.clone())?;
     }
