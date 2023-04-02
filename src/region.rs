@@ -16,20 +16,27 @@ impl Region {
         }
     }
 
-    pub fn get_team(&self, name: String, players: &Vec<Player>) -> Option<&mut Team> {
+    pub fn get_team(&self, name: String, players: &Vec<Player>) -> Option<&Team> {
         if let Some(index) = self.teams.iter().position(|t| t.name == name) {
-            Some(&mut self.teams[index])
+            return Some(&self.teams[index]);
         } else if let Some(index) = self.teams.iter()
             .position(|t| t.players.len() == players.len() && t.players.iter()
                 .zip(players.iter()).all(|(a, b)| a.name == b.name)) {
-            Some(&mut self.teams[index])
-        } else {
+            return Some(&self.teams[index]);
+        }
+        None
+    }
+
+    pub fn fill_team(&mut self, name: String, players: &Vec<Player>) {
+        // if the name is not found, and the players are not found, add a new team
+        if self.teams.iter().position(|t| t.name == name).is_none() &&
+            self.teams.iter().position(|t| t.players.len() == players.len() && t.players.iter()
+                .zip(players.iter()).all(|(a, b)| a.name == b.name)).is_none() {
             let mut team = Team::new(name.clone());
             for player in players.iter() {
                 team.players.push(player.clone());
             }
             self.teams.push(team);
-            self.teams.last_mut()
         }
     }
 
