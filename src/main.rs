@@ -20,9 +20,9 @@ fn parse_data() -> Result<Vec<Match>> {
     Ok(matches)
 }
 
-fn get_region(regions: &Vec<Region>, name: String) -> Option<&Region> {
+fn get_region(regions: &mut Vec<Region>, name: String) -> Option<&mut Region> {
     if let Some(index) = regions.iter().position(|r| r.name == name) {
-        return Some(&regions[index]);
+        return Some(&mut regions[index]);
     }
     None
 }
@@ -62,8 +62,8 @@ fn find_players(regions: &Vec<Region>, team: &rlcs_data::Team) -> Option<Vec<Pla
     Some(result)
 }
 
-fn simulate_match(team_blue: &Team, team_orange: &Team) {
-    println!("{} vs {}", team_blue.name, team_orange.name);
+fn simulate_match(blue_team: &mut Team, orange_team: &mut Team) {
+    println!("Double Check.");
 }
 
 fn simulate_matches(matches: &Vec<Match>) -> Option<()> {
@@ -78,7 +78,6 @@ fn simulate_matches(matches: &Vec<Match>) -> Option<()> {
             Some(o) => o,
             None => continue,
         };
-
         let blue_players: Vec<Player> = match find_players(&regions, blue_ref) {
             Some(p) => p,
             None => continue,
@@ -93,9 +92,12 @@ fn simulate_matches(matches: &Vec<Match>) -> Option<()> {
         region_mut.fill_team(blue_ref.team.team.name.clone(), &blue_players);
         region_mut.fill_team(orange_ref.team.team.name.clone(), &orange_players);
 
-        let region = get_region(&regions, series.event.region.clone())?;
-        let blue_team = region.get_team(blue_ref.team.team.name.clone(), &blue_players)?;
-        let orange_team = region.get_team(orange_ref.team.team.name.clone(), &orange_players)?;
+        let region = get_region(&mut regions, series.event.region.clone())?;
+        let (blue_team, orange_team) = region.get_teams_mut(
+            &blue_players,
+            &orange_players,
+        )?;
+        println!("Check.");
         simulate_match(blue_team, orange_team);
     }
     Some(())

@@ -21,3 +21,15 @@ impl Team {
             .find(|p| p.name == name)
     }
 }
+impl PartialEq<Vec<Player>> for Team {
+    fn eq(&self, other: &Vec<Player>) -> bool {
+        self.players.len() == other.len() && self.players.iter()
+            .zip(other.iter()).all(|(a, b)| a.name == b.name)
+    }
+}
+impl PartialEq<Vec<Player>> for &mut Team {
+    fn eq(&self, other: &Vec<Player>) -> bool {
+        self.players.len() == other.len() && self.players.iter()
+            .zip(other.iter()).all(|(a, b)| a.name == b.name)
+    }
+}
