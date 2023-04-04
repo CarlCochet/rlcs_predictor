@@ -62,8 +62,23 @@ fn find_players(regions: &Vec<Region>, team: &rlcs_data::Team) -> Option<Vec<Pla
     Some(result)
 }
 
-fn simulate_match(blue_team: &mut Team, orange_team: &mut Team) {
+fn simulate_match(blue_team: &mut Team, orange_team: &mut Team, series: &Match) -> Option<()> {
     println!("{} vs {}", blue_team.name, orange_team.name);
+
+    let mut blue_score = 0;
+    let mut orange_score = 0;
+    let games = series.games.clone()?;
+    for game in &games {
+        let blue_scored = game.blue;
+        let orange_scored = game.orange;
+        if blue_scored > orange_scored {
+            blue_score += 1;
+        } else {
+            orange_score += 1;
+        }
+    }
+    
+    Some(())
 }
 
 fn simulate_matches(matches: &Vec<Match>) -> Option<()> {
@@ -97,7 +112,10 @@ fn simulate_matches(matches: &Vec<Match>) -> Option<()> {
             &blue_players,
             &orange_players,
         )?;
-        simulate_match(blue_team, orange_team);
+        match simulate_match(blue_team, orange_team, series) {
+            Some(_) => (),
+            None => continue,
+        };
     }
     Some(())
 }
@@ -107,6 +125,8 @@ fn main() {
         Ok(matches) => matches,
         Err(e) => panic!("Error: {}", e),
     };
-    simulate_matches(&matches).expect("Error simulating matches.");
-    println!("The first event is {}.", matches[0].blue.as_ref().unwrap().team.team.name);
+    match simulate_matches(&matches) {
+        Some(_) => print!("Done."),
+        None => print!("Error simulating the matches."),
+    };
 }

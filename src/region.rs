@@ -1,5 +1,6 @@
 use crate::team::Team;
 use crate::player::Player;
+use glicko_2::{Rating, Tuning};
 // use crate::series::Series;
 
 #[derive(Debug, Clone)]

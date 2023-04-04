@@ -49,6 +49,8 @@ pub struct Format {
 #[derive(Serialize, Deserialize)]
 pub struct Team {
     pub team: TeamData,
+    pub score: Option<i32>,
+    pub winner: Option<bool>,
     pub players: Option<Vec<Player>>,
 }
 
@@ -81,7 +83,7 @@ pub struct PlayerInfo {
     pub country: Option<String>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Game {
     pub _id: Option<String>,
     pub blue: i32,
