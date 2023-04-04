@@ -20,6 +20,14 @@ impl Team {
             .iter()
             .find(|p| p.name == name)
     }
+
+    pub fn update_rating(&mut self) {
+        let mut total_rating = 0;
+        for player in self.players.iter() {
+            total_rating += player.rating;
+        }
+        self.rating = total_rating / self.players.len() as i32;
+    }
 }
 impl PartialEq<Vec<Player>> for Team {
     fn eq(&self, other: &Vec<Player>) -> bool {

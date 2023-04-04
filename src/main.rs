@@ -63,7 +63,7 @@ fn find_players(regions: &Vec<Region>, team: &rlcs_data::Team) -> Option<Vec<Pla
 }
 
 fn simulate_match(blue_team: &mut Team, orange_team: &mut Team) {
-    println!("Double Check.");
+    println!("{} vs {}", blue_team.name, orange_team.name);
 }
 
 fn simulate_matches(matches: &Vec<Match>) -> Option<()> {
@@ -97,7 +97,6 @@ fn simulate_matches(matches: &Vec<Match>) -> Option<()> {
             &blue_players,
             &orange_players,
         )?;
-        println!("Check.");
         simulate_match(blue_team, orange_team);
     }
     Some(())
