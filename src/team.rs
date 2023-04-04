@@ -1,5 +1,5 @@
 use crate::player::Player;
-use glicko_2::{Rating, Tuning};
+use crate::rating_params::RatingParams;
 
 #[derive(Debug, Clone)]
 pub struct Team {

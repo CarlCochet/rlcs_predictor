@@ -1,7 +1,6 @@
 use crate::team::Team;
 use crate::player::Player;
-use glicko_2::{Rating, Tuning};
-// use crate::series::Series;
+use crate::rating_params::RatingParams;
 
 #[derive(Debug, Clone)]
 pub struct Region {

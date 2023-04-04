@@ -2,10 +2,12 @@ mod player;
 mod region;
 mod team;
 mod rlcs_data;
+mod rating_params;
 
 use std::fs::File;
 use std::io::prelude::*;
 use serde_json::Result;
+use kdam::tqdm;
 
 use crate::player::Player;
 use crate::team::Team;
@@ -63,8 +65,6 @@ fn find_players(regions: &Vec<Region>, team: &rlcs_data::Team) -> Option<Vec<Pla
 }
 
 fn simulate_match(blue_team: &mut Team, orange_team: &mut Team, series: &Match) -> Option<()> {
-    println!("{} vs {}", blue_team.name, orange_team.name);
-
     let mut blue_score = 0;
     let mut orange_score = 0;
     let games = series.games.clone()?;
@@ -84,7 +84,7 @@ fn simulate_match(blue_team: &mut Team, orange_team: &mut Team, series: &Match) 
 fn simulate_matches(matches: &Vec<Match>) -> Option<()> {
     let mut regions: Vec<Region> = Vec::new();
 
-    for series in matches {
+    for series in tqdm!(matches.iter()) {
         let blue_ref: &rlcs_data::Team = match series.blue.as_ref() {
             Some(b) => b,
             None => continue,
@@ -126,7 +126,7 @@ fn main() {
         Err(e) => panic!("Error: {}", e),
     };
     match simulate_matches(&matches) {
-        Some(_) => print!("Done."),
-        None => print!("Error simulating the matches."),
+        Some(_) => print!("\nDone."),
+        None => print!("\nError simulating the matches."),
     };
 }
