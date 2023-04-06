@@ -27,4 +27,10 @@ impl RatingParams {
             is_scaled: false,
         }
     }
+
+    pub fn update(&mut self, mu: f64, phi: f64, sigma: f64) {
+        self.mu = mu;
+        self.phi = phi;
+        self.sigma = sigma;
+    }
 }
