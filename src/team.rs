@@ -5,14 +5,14 @@ use crate::rating_params::RatingParams;
 pub struct Team {
     pub name: String,
     pub players: Vec<Player>,
-    pub rating: i32,
+    pub rating: RatingParams,
 }
 impl Team {
     pub fn new(name: String) -> Team {
         Team {
             name,
             players: Vec::new(),
-            rating: 1500,
+            rating: RatingParams::default(),
         }
     }
 
@@ -27,7 +27,7 @@ impl Team {
         for player in self.players.iter() {
             total_rating += player.rating;
         }
-        self.rating = total_rating / self.players.len() as i32;
+        self.rating.mu = (total_rating / self.players.len() as i32) as f64;
     }
 }
 impl PartialEq<Vec<Player>> for Team {

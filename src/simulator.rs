@@ -1,4 +1,6 @@
 use kdam::tqdm;
+use glicko_2::{Rating, Tuning, game};
+
 use crate::player::Player;
 use crate::team::Team;
 use crate::region::Region;
@@ -59,6 +61,11 @@ fn simulate_match(blue_team: &mut Team, orange_team: &mut Team, series: &rlcs_da
             orange_score += 1;
         }
     }
+
+    let blue_tuning = Tuning::new(blue_team.rating.mu, blue_team.rating.phi, blue_team.rating.sigma, blue_team.rating.tau);
+    let orange_tuning = Tuning::new(orange_team.rating.mu, orange_team.rating.phi, orange_team.rating.sigma, orange_team.rating.tau);
+    let blue_rating = Rating::new(&blue_tuning);
+    let orange_rating = Rating::new(&orange_tuning);
 
     Some(())
 }

@@ -6,14 +6,14 @@ use crate::rating_params::RatingParams;
 pub struct Region {
     pub name: String,
     pub teams: Vec<Team>,
-    pub rating: i32,
+    pub rating: RatingParams,
 }
 impl Region {
     pub fn new(name: String) -> Region {
         Region {
             name,
             teams: Vec::new(),
-            rating: 1500,
+            rating: RatingParams::default(),
         }
     }
 
