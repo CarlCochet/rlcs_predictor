@@ -52,6 +52,7 @@ fn simulate_match(blue_team: &mut Team, orange_team: &mut Team, series: &rlcs_da
     let mut blue_score = 0;
     let mut orange_score = 0;
     let games = series.games.clone()?;
+
     for game in &games {
         let blue_scored = game.blue;
         let orange_scored = game.orange;
@@ -73,13 +74,13 @@ fn simulate_match(blue_team: &mut Team, orange_team: &mut Team, series: &rlcs_da
         game::compete(&mut orange_rating, &mut blue_rating, false);
     }
 
-    blue_team.rating.update(blue_rating.mu, blue_rating.phi, blue_rating.sigma);
-    orange_team.rating.update(orange_rating.mu, orange_rating.phi, orange_rating.sigma);
+    blue_team.rating.update(blue_rating.mu, blue_rating.phi, blue_rating.sigma, blue_rating.is_scaled);
+    orange_team.rating.update(orange_rating.mu, orange_rating.phi, orange_rating.sigma, orange_rating.is_scaled);
 
     Some(())
 }
 
-pub fn simulate_matches(matches: &Vec<rlcs_data::Match>) -> Option<()> {
+pub fn simulate_matches(matches: &Vec<rlcs_data::Match>) -> Option<Vec<Region>> {
     let mut regions: Vec<Region> = Vec::new();
 
     for series in tqdm!(matches.iter()) {
@@ -118,5 +119,5 @@ pub fn simulate_matches(matches: &Vec<rlcs_data::Match>) -> Option<()> {
             None => continue,
         };
     }
-    Some(())
+    Some(regions)
 }

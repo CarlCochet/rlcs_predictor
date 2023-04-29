@@ -11,6 +11,7 @@ use serde_json::Result;
 
 use crate::rlcs_data::Match;
 use crate::simulator::simulate_matches;
+use crate::region::Region;
 
 fn parse_data() -> Result<Vec<Match>> {
     let mut file = File::open("data/matches_full.json").expect("File not found.");
@@ -20,13 +21,28 @@ fn parse_data() -> Result<Vec<Match>> {
     Ok(matches)
 }
 
+fn display_ratings(regions: Vec<Region>) {
+    for region in regions {
+        println!("{}:", region.name);
+        for team in region.teams {
+            for player in team.players {
+                if player.games_played > 1 {
+                    println!("{}: {}. Games played: {}", player.name, player.rating, player.games_played);
+                }
+            }
+        }
+        println!();
+    }
+}
+
 fn main() {
     let matches = match parse_data() {
         Ok(matches) => matches,
         Err(e) => panic!("Error: {}", e),
     };
     match simulate_matches(&matches) {
-        Some(_) => print!("\nDone."),
+        Some(regions) => display_ratings(regions),
         None => print!("\nError simulating the matches."),
     };
+
 }

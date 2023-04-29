@@ -6,6 +6,7 @@ pub struct Team {
     pub name: String,
     pub players: Vec<Player>,
     pub rating: RatingParams,
+    pub games_played: i32,
 }
 impl Team {
     pub fn new(name: String) -> Team {
@@ -13,6 +14,7 @@ impl Team {
             name,
             players: Vec::new(),
             rating: RatingParams::default(),
+            games_played: 0,
         }
     }
 
@@ -28,6 +30,7 @@ impl Team {
             total_rating += player.rating;
         }
         self.rating.mu = (total_rating / self.players.len() as i32) as f64;
+        self.games_played += 1;
     }
 }
 impl PartialEq<Vec<Player>> for Team {

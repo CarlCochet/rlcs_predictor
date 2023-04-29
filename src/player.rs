@@ -3,12 +3,14 @@
 pub struct Player {
     pub name: String,
     pub rating: i32,
+    pub games_played: i32,
 }
 impl Player {
     pub fn new(name: String) -> Player {
         Player {
             name,
             rating: 1500,
+            games_played: 0,
         }
     }
 
@@ -31,5 +33,6 @@ impl Player {
                 (1.0 / (team_scores[2] as f32 / team_score as f32)).powf(gamma as f32) as f32));
             self.rating += (change.abs() as f32 * sa) as i32;
         }
+        self.games_played += 1;
     }
 }
